@@ -13,8 +13,8 @@
 #include <math.h>
 #include <cuda.h>
 #include <string.h>
-#include "common/pgm.h"
-
+#include "pgm.h"
+#define M_PI   3.14159265358979323846264338327950288
 const int degreeInc = 2;
 const int degreeBins = 180 / degreeInc;
 const int rBins = 100;
@@ -114,6 +114,7 @@ int main (int argc, char **argv)
   int *cpuht;
   int w = inImg.x_dim;
   int h = inImg.y_dim;
+  printf ("Image size is %d x %d\n", w, h);
 
   float* d_Cos;
   float* d_Sin;
