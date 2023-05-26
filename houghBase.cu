@@ -116,7 +116,9 @@ int main (int argc, char **argv)
   int w = inImg.x_dim;
   int h = inImg.y_dim;
   printf ("Image size is %d x %d\n", w, h);
-
+  cudaEvent_t start, stop;
+cudaEventCreate(&start);
+cudaEventCreate(&stop);
 
   float* d_Cos;
   float* d_Sin;
@@ -161,10 +163,19 @@ int main (int argc, char **argv)
   // execution configuration uses a 1-D grid of 1-D blocks, each made of 256 threads
   //1 thread por pixel
   int blockNum = ceil (w * h / 256);
+  cudaEventRecord(start);
   GPU_HoughTran <<< blockNum, 256 >>> (d_in, w, h, d_hough, rMax, rScale, d_Cos, d_Sin);
+  cudaEventRecord(stop);
+
 
   // get results from device
   cudaMemcpy (h_hough, d_hough, sizeof (int) * degreeBins * rBins, cudaMemcpyDeviceToHost);
+  cudaEventSynchronize(stop);
+  float milliseconds = 0;
+
+  cudaEventElapsedTime(&milliseconds, start, stop);
+  printf("Tiempo de ejecucion: %f ms\n", milliseconds);
+
 
   // compare CPU and GPU results
   for (i = 0; i < degreeBins * rBins; i++)
