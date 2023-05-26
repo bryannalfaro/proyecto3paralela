@@ -162,7 +162,7 @@ cudaEventCreate(&stop);
 
   // execution configuration uses a 1-D grid of 1-D blocks, each made of 256 threads
   //1 thread por pixel
-  int blockNum = ceil (w * h / 256);
+  int blockNum = ceil ((double)w * (double)h / (double)256);
   cudaEventRecord(start);
   GPU_HoughTran <<< blockNum, 256 >>> (d_in, w, h, d_hough, rMax, rScale, d_Cos, d_Sin);
   cudaEventRecord(stop);
