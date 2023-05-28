@@ -1,4 +1,4 @@
-all: pgm.o	hough
+all: hough
 
 hough:	houghBase.cu pgm
 	nvcc houghBase.cu pgm.cpp -o hough
