@@ -19,6 +19,29 @@ const int degreeInc = 2;
 const int degreeBins = 180 / degreeInc;
 const int rBins = 100;
 const float radInc = degreeInc * M_PI / 180;
+
+void store_Image(char * name, int w, int h, PGMImage inImg);
+
+void store_Image(char * name, int w, int h, PGMImage inImg) {
+    FILE* pgmimg;
+    int i;
+    pgmimg = fopen(name, "wb");
+  
+    // Writing Magic Number to the File
+    fprintf(pgmimg, "P2\n"); 
+  
+    // Writing Width and Height
+    fprintf(pgmimg, "%d %d\n", w, h); 
+  
+    // Writing the maximum gray value
+    fprintf(pgmimg, "255\n");
+    for (i = 0; i < h*w; i++) {
+      fprintf(pgmimg, "%d ", inImg.pixels[i]);
+    }
+    fclose(pgmimg);
+
+}
+
 //*****************************************************************
 // The CPU function returns a pointer to the accummulator
 void CPU_HoughTran (unsigned char *pic, int w, int h, int **acc)
@@ -108,13 +131,17 @@ __global__ void GPU_HoughTran (unsigned char *pic, int w, int h, int *acc, float
 //*****************************************************************
 int main (int argc, char **argv)
 {
-  int i;
+  int i, j;
 
   PGMImage inImg (argv[1]);
 
   int *cpuht;
   int w = inImg.x_dim;
   int h = inImg.y_dim;
+
+  store_Image("result.pgm", w, h, inImg);
+  
+
   printf ("Image size is %d x %d\n", w, h);
   cudaEvent_t start, stop;
 cudaEventCreate(&start);
