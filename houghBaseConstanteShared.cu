@@ -116,13 +116,13 @@ __constant__ float dSin[degreeBins];
  */
  __global__ void GPU_HoughTranShared(unsigned char *pic, int w, int h, int *acc, float rMax, float rScale)
 {
-  int locID = threadIdx.x; //local ID
+
   // we get the global ID
   int gloID =  (blockIdx.x * blockDim.x) + threadIdx.x;
 
 
   if (gloID > w * h) return;     // if the global id is greater than the number of pixels we return
-
+  int locID = threadIdx.x; //local ID
   int xCent = w / 2;
   int yCent = h / 2;
 
@@ -220,9 +220,10 @@ cudaEventCreate(&stop);
   cudaMemset (dHough, 0, sizeof (int) * degreeBins * rBins);
 
   // each block handles 256 pixels
-  int blockNum = ceil ((double)w * (double)h / (double)256);
+  int blockNum = ceil ((double)w * (double)h / (double)300);
   cudaEventRecord(start);
-  GPU_HoughTranShared <<< blockNum, 256 >>> (dIn, w, h, dHough, rMax, rScale);
+  GPU_HoughTranShared <<< blockNum, 300 >>> (dIn, w, h, dHough, rMax, rScale);
+  cudaDeviceSynchronize();
   cudaEventRecord(stop);
 
 
