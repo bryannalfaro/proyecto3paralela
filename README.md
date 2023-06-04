@@ -18,12 +18,12 @@ This project tries to find the lines of an image using the Hough Transform algor
 ``○`
 ```
 
+In which `file_name` is the name of the file user wants to compile, It can be `houghBase` or `houghBaseConstante` or `houghBaseConstanteShared`.
+And `executable_file_name` is the name user want to save the executable file.
+
 ## Video Link
 
 https://youtu.be/Uayu8b77wDg
-
-In which `file_name` is the name of the file user wants to compile, It can be `houghBase` or `houghBaseConstante` or `houghBaseConstanteShared`.
-And `executable_file_name` is the name user want to save the executable file.
 
 ## Contributors
 
